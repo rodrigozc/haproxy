@@ -1,0 +1,2 @@
+/etc/consul/service.ctmpl:/etc/consul/service.json:consul reload
+/etc/haproxy/haproxy.ctmpl:/etc/haproxy/haproxy.cfg:/docker/run/haproxy.sh
