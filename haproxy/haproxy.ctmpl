@@ -23,9 +23,9 @@ defaults
 	mode	http
 	option	httplog
 	option	dontlognull
-        timeout connect 5000
-        timeout client  50000
-        timeout server  50000
+	timeout connect 5000
+	timeout client  50000
+	timeout server  50000
 	errorfile 400 /etc/haproxy/errors/400.http
 	errorfile 403 /etc/haproxy/errors/403.http
 	errorfile 408 /etc/haproxy/errors/408.http
@@ -35,21 +35,21 @@ defaults
 	errorfile 504 /etc/haproxy/errors/504.http
 
 frontend main *:80
-  stats enable
-  stats hide-version
-  stats refresh 30s
-  stats show-node
-  stats uri /haproxy?stats
+	stats enable
+	stats hide-version
+	stats refresh 30s
+	stats show-node
+	stats uri  /haproxy?stats
 
-  ### ACL'S
-  {{range services}}
+	### ACL'S
+	{{range services}}
 	acl uri_{{.Name}} path_beg -i {{ printf "%s/consul/service/uri" .Name | key }}{{end}}
 
-  ### BACKEND RULES
-  {{range services}}
-  use_backend be_{{.Name}} if uri_{{.Name}}{{end}}
+	### BACKEND RULES
+	{{range services}}
+	use_backend be_{{.Name}} if uri_{{.Name}}{{end}}
 
-
+### BACKEND SERVERS
 {{range services}}backend be_{{.Name}}
 	balance roundrobin
 	{{range service .Name}}server {{.Node}} {{.Address}}:{{.Port}} check{{end}}
