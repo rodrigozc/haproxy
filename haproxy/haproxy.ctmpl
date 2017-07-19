@@ -43,13 +43,14 @@ frontend main *:80
 
   ### ACL'S
   {{range services}}
-  acl uri_{{.Name}} path_beg -i {{ printf "%s/consul/service/uri" .Name | key }}{{end}}
+	acl uri_{{.Name}} path_beg -i {{ printf "%s/consul/service/uri" .Name | key }}{{end}}
 
   ### BACKEND RULES
   {{range services}}
   use_backend be_{{.Name}} if uri_{{.Name}}{{end}}
 
 
-{{range services}}backend be_{{.Name}}{{range service .Name}}
-  server {{.Node}} {{.Address}}:{{.Port}}{{end}}
+{{range services}}backend be_{{.Name}}
+	balance roundrobin
+	{{range service .Name}}server {{.Node}} {{.Address}}:{{.Port}} check{{end}}
 {{end}}
