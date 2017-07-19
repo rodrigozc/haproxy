@@ -52,5 +52,6 @@ frontend main *:80
 ### BACKEND SERVERS
 {{range services}}backend be_{{.Name}}
 	balance roundrobin
-	{{range service .Name}}server {{.Node}} {{.Address}}:{{.Port}} check{{end}}
+	{{range service .Name}}server {{.Node}} {{.Address}}:{{.Port}} check
+	{{end}}
 {{end}}
